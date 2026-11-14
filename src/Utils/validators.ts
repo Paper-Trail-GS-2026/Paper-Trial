@@ -1,4 +1,4 @@
-import type { LoginFormData, LoginFormErrors, RegisterFormData, RegisterFormErrors } from "../Types/types";
+import type { DemoRegisterFormData, DemoRegisterFormErrors, LoginFormData, LoginFormErrors } from "../Types/types";
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -19,45 +19,13 @@ export function validateLogin(formData: LoginFormData) {
   return { errors, isValid };
 }
 
-export function validateRegistration(formData: RegisterFormData, canRegister: boolean) {
-  const newErrors: RegisterFormErrors = {};
-  let isValid = true;
+export function validateRegistration(formData: DemoRegisterFormData) {
+  const errors: DemoRegisterFormErrors = { ...validateLogin(formData).errors };
 
-  if (!formData.name.trim()) {
-    newErrors.name = "Nome completo é obrigatório";
-    isValid = false;
-  }
-
-  const rawCpf = formData.cpf.replace(/\D/g, "");
-  if (rawCpf.length !== 11) {
-    newErrors.cpf = "CPF deve conter 11 dígitos";
-    isValid = false;
-  }
-
-  if (!emailRegex.test(formData.email)) {
-    newErrors.email = "Email inválido";
-    isValid = false;
-  }
-
-  if (!formData.phone.trim()) {
-    newErrors.phone = "Telefone é obrigatório";
-    isValid = false;
-  }
-
-  if (!canRegister || !formData.cityId) {
-    newErrors.city = "Selecione uma cidade";
-    isValid = false;
-  }
-
-  if (formData.senha.length < 8) {
-    newErrors.senha = "Senha deve ter no mínimo 8 caracteres (requisito da API)";
-    isValid = false;
-  }
-
+  if (!formData.name.trim()) errors.name = "Informe seu nome ou apelido.";
   if (formData.senha !== formData.confirmarSenha) {
-    newErrors.confirmarSenha = "As senhas não coincidem";
-    isValid = false;
+    errors.confirmarSenha = "As senhas precisam ser iguais.";
   }
 
-  return { errors: newErrors, isValid };
+  return { errors, isValid: !Object.values(errors).some(Boolean) };
 }
