@@ -1,68 +1,65 @@
-import React, { createContext, useContext, useEffect, useState, useMemo } from "react";
-import { Appearance } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useColorScheme } from "nativewind";
-import type { Theme, PaperTrailThemeColors, ThemeContextType } from "../Types/types";
+import React,{ createContext,useContext,useEffect,useMemo,useState } from "react";
+import type { ProviderProps } from "../Types/types";
+import { Theme,ThemeContextType } from "../Types/types";
 
-const { papertrialLightColors, papertrialDarkColors } = require("../../tailwind.config");
-
-export type { Theme } from "../Types/types";
-export type { PaperTrailThemeColors };
-
-
+const { paperTrailLightColors, paperTrailDarkColors } = require("../../tailwind.config");
 const STORAGE_THEME_KEY = "@papertrial_app_theme";
-
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+export const ThemeProvider: React.FC<ProviderProps> = ({
+  children
+}) => {
+    const { setColorScheme } = useColorScheme();
+    const [theme, setThemeState] = useState<Theme>("light");
+    const [ready, setReady] = useState(false);
 
-export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { colorScheme, setColorScheme } = useColorScheme();
-  const systemColorScheme = Appearance.getColorScheme();
-
-  const [theme, setThemeState] = useState<Theme>(() => {
-    return colorScheme === "dark" || systemColorScheme === "dark" ? "dark" : "light";
-  });
-
-  useEffect(() => {
-    loadStoredTheme();
-  }, []);
-
-  const loadStoredTheme = async () => {
-    try {
-      const stored = await AsyncStorage.getItem(STORAGE_THEME_KEY);
-      if (stored === "light" || stored === "dark") {
-        setThemeState(stored);
-        setColorScheme(stored);
-      } else if (systemColorScheme === "dark" || systemColorScheme === "light") {
-        setThemeState(systemColorScheme);
-        setColorScheme(systemColorScheme);
+    useEffect(() => {
+      let active = true;
+      async function loadTheme() {
+        let initialTheme: Theme = "light";
+        try {
+          const stored = await AsyncStorage.getItem(STORAGE_THEME_KEY);
+          if (stored === "dark") initialTheme = "dark";
+        } catch (error) {
+          console.error("Erro ao carregar tema armazenado:", error);
+        }
+        if (active) {
+          setThemeState(initialTheme);
+          setColorScheme(initialTheme);
+          setReady(true);
+        }
       }
-    } catch (error) {
-      console.error("Erro ao carregar tema armazenado:", error);
-    }
+      void loadTheme();
+      return () => { active = false; };
+    }, [setColorScheme]);
+
+    const setTheme = (newTheme: Theme) => {
+      setThemeState(newTheme);
+      setColorScheme(newTheme);
+      AsyncStorage.setItem(STORAGE_THEME_KEY, newTheme).catch(err => {
+        console.error("Erro ao salvar tema:", err);
+      });
+    };
+    const toggleTheme = () => {
+      setTheme(theme === "dark" ? "light" : "dark");
+    };
+    const isDark = theme === "dark";
+    const colors = useMemo(() => isDark ? paperTrailDarkColors : paperTrailLightColors, [isDark]);
+    if (!ready) return null;
+
+    return (
+      <ThemeContext.Provider value={{
+        theme,
+        isDark,
+        colors,
+        setTheme,
+        toggleTheme
+      }}>
+        {children}
+      </ThemeContext.Provider>
+    );
   };
-
-  const setTheme = (newTheme: Theme) => {
-    setThemeState(newTheme);
-    setColorScheme(newTheme);
-    AsyncStorage.setItem(STORAGE_THEME_KEY, newTheme).catch((err) => {
-      console.error("Erro ao salvar tema:", err);
-    });
-  };
-
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
-  };
-
-  const isDark = theme === "dark";
-  const colors = useMemo(() => (isDark ? papertrialDarkColors : papertrialLightColors), [isDark]);
-
-  return (
-    <ThemeContext.Provider value={{ theme, isDark, colors, setTheme, toggleTheme }}>
-      {children}
-    </ThemeContext.Provider>
-  );
-};
-
 export const useTheme = () => {
   const context = useContext(ThemeContext);
   if (!context) {

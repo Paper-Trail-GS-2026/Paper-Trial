@@ -2,35 +2,35 @@
 // 1. CONSTANTES DE CORES DO DESIGN SYSTEM
 // ==========================================
 
-/** Azuis da marca */
-const clyvoBrandColors = {
-  DEFAULT: "#1f6ae1",
-  hover: "#0069e8",
-  ink: "#19448b",
-  navy: "#182447",
-  navy2: "#111c3a",
-  soft: "#e5ebf5",
-  softLine: "#99b6e6",
+/** Azul e marinho da referência Lovable */
+const paperTrailBrandColors = {
+  DEFAULT: "#3978B8",
+  hover: "#30689F",
+  ink: "#17212F",
+  navy: "#26384B",
+  navy2: "#17212F",
+  soft: "#EAF1F8",
+  softLine: "#B5C7DB",
 };
 
 /** Neutros */
-const clyvoNeutralColors = {
-  paper: "#ffffff",
-  ground: "#f2f3f5",
-  ink: "#0c0d10",
-  body: "#393f4b",
-  softInk: "#525a6a",
-  mute: "#6c778c",
-  rule: "#d9dce1",
-  rule2: "#e1e7ee",
+const paperTrailNeutralColors = {
+  paper: "#FFFFFF",
+  ground: "#F7F8FA",
+  ink: "#202936",
+  body: "#4B5563",
+  softInk: "#525C69",
+  mute: "#626D7B",
+  rule: "#E8EBEF",
+  rule2: "#EEF1F5",
 };
 
 /** Status */
-const clyvoStatusColors = {
-  ok: "#008c4d",
+const paperTrailStatusColors = {
+  ok: "#27845A",
   mint: "#99e6bf",
-  warn: "#f6b60b",
-  danger: "#d32f2f",
+  warn: "#D99135",
+  danger: "#AC302E",
 };
 
 // ==========================================
@@ -39,78 +39,86 @@ const clyvoStatusColors = {
 
 const tailwindColors = {
   // Compatibilidade com código legado
-  blue: clyvoBrandColors.DEFAULT,
-  lightBlue: "#E6F0FA",
-  text: clyvoBrandColors.DEFAULT,
-  mainBackground: "#f3f5f8",
-  secondaryBackground: clyvoNeutralColors.paper,
+  blue: paperTrailBrandColors.DEFAULT,
+  lightBlue: paperTrailBrandColors.soft,
+  text: paperTrailBrandColors.DEFAULT,
+  mainBackground: paperTrailNeutralColors.ground,
+  secondaryBackground: paperTrailNeutralColors.paper,
 
-  // Azuis
+  // Marca
   brand: {
-    DEFAULT: clyvoBrandColors.DEFAULT,
-    hover: clyvoBrandColors.hover,
-    ink: clyvoBrandColors.ink,
+    DEFAULT: paperTrailBrandColors.DEFAULT,
+    hover: paperTrailBrandColors.hover,
+    ink: paperTrailBrandColors.ink,
   },
   navy: {
-    DEFAULT: clyvoBrandColors.navy,
-    2: clyvoBrandColors.navy2,
+    DEFAULT: paperTrailBrandColors.navy,
+    2: paperTrailBrandColors.navy2,
   },
-  soft: clyvoBrandColors.soft,
-  "soft-line": clyvoBrandColors.softLine,
+  soft: paperTrailBrandColors.soft,
+  "soft-line": paperTrailBrandColors.softLine,
 
   // Neutros
-  paper: clyvoNeutralColors.paper,
-  ground: clyvoNeutralColors.ground,
-  ink: clyvoNeutralColors.ink,
-  body: clyvoNeutralColors.body,
-  "soft-ink": clyvoNeutralColors.softInk,
-  mute: clyvoNeutralColors.mute,
+  paper: paperTrailNeutralColors.paper,
+  ground: paperTrailNeutralColors.ground,
+  ink: paperTrailNeutralColors.ink,
+  body: paperTrailNeutralColors.body,
+  "soft-ink": paperTrailNeutralColors.softInk,
+  mute: paperTrailNeutralColors.mute,
   rule: {
-    DEFAULT: clyvoNeutralColors.rule,
-    2: clyvoNeutralColors.rule2,
+    DEFAULT: paperTrailNeutralColors.rule,
+    2: paperTrailNeutralColors.rule2,
   },
 
   // Status
-  ok: clyvoStatusColors.ok,
-  mint: clyvoStatusColors.mint,
-  warn: clyvoStatusColors.warn,
-  danger: clyvoStatusColors.danger,
+  ok: paperTrailStatusColors.ok,
+  mint: paperTrailStatusColors.mint,
+  warn: paperTrailStatusColors.warn,
+  danger: paperTrailStatusColors.danger,
+  "status-ready": "#236644",
+  "status-ready-bg": "#E7F3EC",
+  "status-pending": "#855214",
+  "status-pending-bg": "#FFF3DE",
 };
 
 // ==========================================
 // 3. PALETAS PARA MODO CLARO E MODO ESCURO
 // ==========================================
 
-/** @type {import('./src/Types/types').ClyvoThemeColors} */
-const clyvoLightColors = {
-  background: clyvoNeutralColors.ground,       // #f2f3f5
-  card: clyvoNeutralColors.paper,               // #ffffff
-  surface: clyvoNeutralColors.paper,            // #ffffff
-  soft: clyvoBrandColors.soft,                  // #e5ebf5
-  text: clyvoNeutralColors.ink,                 // #0c0d10
-  textSecondary: clyvoNeutralColors.body,       // #393f4b
-  textMuted: clyvoNeutralColors.mute,           // #6c778c
-  border: clyvoNeutralColors.rule,              // #d9dce1
-  borderSecondary: clyvoNeutralColors.rule2,    // #e1e7ee
-  brand: clyvoBrandColors.DEFAULT,              // #1f6ae1
-  icon: clyvoNeutralColors.ink,                 // #0c0d10
-  iconSecondary: clyvoNeutralColors.mute,       // #6c778c
+/** @type {import('./src/Types/types').PaperTrailThemeColors} */
+const paperTrailLightColors = {
+  background: paperTrailNeutralColors.ground,
+  card: paperTrailNeutralColors.paper,
+  surface: paperTrailNeutralColors.paper,
+  soft: paperTrailBrandColors.soft,
+  text: paperTrailNeutralColors.ink,
+  textSecondary: paperTrailNeutralColors.body,
+  textMuted: paperTrailNeutralColors.mute,
+  border: paperTrailNeutralColors.rule,
+  borderSecondary: paperTrailNeutralColors.rule2,
+  brand: paperTrailBrandColors.DEFAULT,
+  icon: paperTrailNeutralColors.ink,
+  onBrand: paperTrailNeutralColors.paper,
+  danger: paperTrailStatusColors.danger,
+  iconSecondary: paperTrailNeutralColors.mute,
 };
 
-/** @type {import('./src/Types/types').ClyvoThemeColors} */
-const clyvoDarkColors = {
-  background: clyvoBrandColors.navy2,           // #111c3a (fundo escuro profundo)
-  card: clyvoBrandColors.navy,                  // #182447 (cartões e superfícies)
-  surface: clyvoBrandColors.navy,               // #182447
-  soft: "#1e2f5b",                              // azul marinho suave para badges no escuro
-  text: clyvoNeutralColors.paper,               // #ffffff (texto em alto contraste)
-  textSecondary: clyvoBrandColors.soft,         // #e5ebf5
-  textMuted: clyvoBrandColors.softLine,         // #99b6e6
+/** @type {import('./src/Types/types').PaperTrailThemeColors} */
+const paperTrailDarkColors = {
+  background: paperTrailBrandColors.navy2,
+  card: paperTrailBrandColors.navy,
+  surface: paperTrailBrandColors.navy,
+  soft: "#2E4359",                              // superfície tonal do tema escuro
+  text: paperTrailNeutralColors.paper,
+  textSecondary: paperTrailBrandColors.soft,
+  textMuted: paperTrailBrandColors.softLine,
   border: "rgba(255, 255, 255, 0.12)",          // borda suave translúcida
   borderSecondary: "rgba(255, 255, 255, 0.08)",
-  brand: clyvoBrandColors.DEFAULT,              // #1f6ae1
-  icon: clyvoNeutralColors.paper,               // #ffffff
-  iconSecondary: clyvoBrandColors.softLine,     // #99b6e6
+  brand: "#91C4F4",
+  icon: paperTrailNeutralColors.paper,
+  onBrand: paperTrailBrandColors.navy2,
+  danger: "#FFB4AB",
+  iconSecondary: paperTrailBrandColors.softLine,
 };
 
 // ==========================================
@@ -124,7 +132,23 @@ module.exports = {
   presets: [require("nativewind/preset")],
   theme: {
     extend: {
-      colors: tailwindColors,
+      colors: {
+        ...tailwindColors,
+        dark: {
+          brand: paperTrailDarkColors.brand,
+          soft: paperTrailDarkColors.soft,
+          rule: paperTrailDarkColors.border,
+          danger: paperTrailDarkColors.danger,
+        },
+      },
+      fontSize: {
+        display: ["28px", { lineHeight: "35px" }],
+        title: ["28px", { lineHeight: "35px" }],
+        heading: ["18px", { lineHeight: "25px" }],
+        "body-copy": ["15px", { lineHeight: "23px" }],
+        label: ["14px", { lineHeight: "20px" }],
+        caption: ["13px", { lineHeight: "19px" }],
+      },
     },
   },
   plugins: [],
@@ -134,8 +158,8 @@ module.exports = {
 // 5. EXPORTS PARA USO EM RUNTIME (ThemeContext)
 // ==========================================
 
-module.exports.clyvoLightColors = clyvoLightColors;
-module.exports.clyvoDarkColors = clyvoDarkColors;
-module.exports.clyvoBrandColors = clyvoBrandColors;
-module.exports.clyvoNeutralColors = clyvoNeutralColors;
-module.exports.clyvoStatusColors = clyvoStatusColors;
+module.exports.paperTrailLightColors = paperTrailLightColors;
+module.exports.paperTrailDarkColors = paperTrailDarkColors;
+module.exports.paperTrailBrandColors = paperTrailBrandColors;
+module.exports.paperTrailNeutralColors = paperTrailNeutralColors;
+module.exports.paperTrailStatusColors = paperTrailStatusColors;
