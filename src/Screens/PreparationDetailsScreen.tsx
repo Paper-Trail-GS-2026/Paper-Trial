@@ -1,16 +1,15 @@
-import { Header } from "../Components/Header";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
-import { Check, Square } from "lucide-react-native";
 import { useState } from "react";
-import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { EditPreparationNameModal } from "../Components/EditPreparationNameModal";
+import { KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { DeletePreparationModal } from "../Components/DeletePreparationModal";
+import { EditPreparationNameModal } from "../Components/EditPreparationNameModal";
+import { Header } from "../Components/Header";
+import { Checklist } from "../Components/PrepDetailScreenComponents/Checklist";
 import { Progress } from "../Components/ProgressBar";
+import { demoServices } from "../Data/ServicesData";
 import { usePreparations } from "../Context/PreparationsContext";
 import { useTheme } from "../Context/ThemeContext";
-import { demoServices } from "../Data/ServicesData";
-import type { ChecklistProps } from "../Types/types";
 import { PreparationDetailsScreenProps } from "../Types/types";
 import { preparationProgress } from "../Utils/preparationProgress";
 
@@ -21,6 +20,7 @@ export function PreparationDetailsScreen({ route, navigation }: PreparationDetai
   const [deleting, setDeleting] = useState(false);
   const preparation = preparations.find(p => p.id === route.params.preparationId);
   const service = demoServices.find(s => s.id === preparation?.serviceId);
+
   if(!preparation || !service)
     return (<SafeAreaView edges={["top", "left", "right", "bottom"]} className="flex-1 bg-ground dark:bg-navy-2">
       <StatusBar style={isDark ? "light" : "dark"} />
@@ -43,7 +43,9 @@ export function PreparationDetailsScreen({ route, navigation }: PreparationDetai
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>);
+
   const { ready } = preparationProgress(preparation);
+
   return (<SafeAreaView edges={["top", "left", "right", "bottom"]} className="flex-1 bg-ground dark:bg-navy-2">
     <StatusBar style={isDark ? "light" : "dark"} />
     <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} className="flex-1">
@@ -106,32 +108,4 @@ export function PreparationDetailsScreen({ route, navigation }: PreparationDetai
         });
       }} />}
   </SafeAreaView>);
-}
-
-function Checklist({ items, completed, onToggle }: ChecklistProps) {
-  const { colors, isDark } = useTheme();
-  return (<View>
-    <Text accessibilityRole="header" className="text-heading font-semibold text-ink dark:text-paper mb-2">Sua lista de preparação</Text>
-    {items.map((item, index) => {
-      const checked = completed.includes(index);
-      return (<Pressable
-        key={item.name}
-        onPress={() => onToggle(index)}
-        accessibilityRole="checkbox"
-        accessibilityLabel={`${item.name}, ${item.required ? "obrigatório" : "opcional"}`}
-        accessibilityState={{
-          checked
-        }}
-        className={`flex-row gap-3.5 items-center min-h-20 py-5 border-b ${isDark ? "border-dark-rule" : "border-rule"} active:opacity-70`}>
-        {checked ? <View className={`w-6 h-6 rounded ${isDark ? "bg-dark-brand" : "bg-brand"} items-center justify-center`}>
-          <Check size={18} color={colors.onBrand} />
-        </View> : <Square size={24} color={colors.textMuted} />}
-        <View className="flex-1 gap-1">
-          <Text className={`text-body-copy font-normal ${checked ? "text-mute dark:text-soft-line" : "text-ink dark:text-paper"} ${`${checked ? "line-through" : "no-underline"}`}`}>{item.name}</Text>
-          <Text className="text-caption font-normal text-body dark:text-soft">{item.description}</Text>
-          <Text className="text-label font-semibold text-brand dark:text-dark-brand">{item.required ? "Obrigatório" : "Opcional"}</Text>
-        </View>
-      </Pressable>);
-    })}
-  </View>);
 }
