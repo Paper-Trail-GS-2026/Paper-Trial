@@ -1,15 +1,15 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import type { OwnerApiDTO } from "../Types/types";
+import type { UserResponseDTO } from "../Types/types";
 
-// Mantém as chaves existentes para preservar sessões já gravadas no dispositivo.
-const TOKEN_KEY = "authToken";
-const USER_KEY = "@clyvo_user_data";
+// Chaves próprias do PaperTrail; dados legados do Clyvo não autenticam este app.
+const TOKEN_KEY = "@papertrail_auth_token";
+const USER_KEY = "@papertrail_user_data";
 
 export function getStoredToken(): Promise<string | null> {
   return AsyncStorage.getItem(TOKEN_KEY);
 }
 
-export async function saveStoredSession(token: string, profile: OwnerApiDTO): Promise<void> {
+export async function saveStoredSession(token: string, profile: UserResponseDTO): Promise<void> {
   await AsyncStorage.multiSet([
     [TOKEN_KEY, token],
     [USER_KEY, JSON.stringify(profile)],

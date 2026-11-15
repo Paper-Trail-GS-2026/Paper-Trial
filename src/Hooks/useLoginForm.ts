@@ -25,9 +25,9 @@ export function useLoginForm() {
 
     try {
       setIsSubmitting(true);
-      await login();
-    } catch {
-      setSubmitError("Não foi possível entrar. Tente novamente.");
+      await login(formData);
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : "Não foi possível entrar. Tente novamente.");
     } finally {
       setIsSubmitting(false);
     }

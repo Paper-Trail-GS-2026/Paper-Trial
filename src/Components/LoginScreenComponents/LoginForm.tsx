@@ -2,10 +2,12 @@ import { Eye, EyeOff } from "lucide-react-native";
 import { useState } from "react";
 import { Pressable, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useLoginForm } from "../../Hooks/useLoginForm";
+import { useAuth } from "../../Context/AuthContext";
 import { useTheme } from "../../Context/ThemeContext";
 
 export function LoginForm() {
   const { colors } = useTheme();
+  const { sessionError } = useAuth();
   const [emailFocused, setEmailFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -64,7 +66,7 @@ export function LoginForm() {
         <Text className="text-caption font-normal text-brand dark:text-dark-brand">Esqueci minha senha</Text>
       </Pressable>
       {recovery && <Text accessibilityLiveRegion="polite" className="text-caption font-normal text-body dark:text-soft">Recuperação de senha indisponível no momento.</Text>}
-      {!!submitError && <Text accessibilityLiveRegion="polite" className="text-caption text-danger dark:text-dark-danger">{submitError}</Text>}
+      {!!(submitError || sessionError) && <Text accessibilityLiveRegion="polite" className="text-caption text-danger dark:text-dark-danger">{submitError || sessionError}</Text>}
       <TouchableOpacity
         onPress={() => void handleLogin()}
         disabled={isSubmitting}

@@ -21,6 +21,7 @@ export function ProfileScreen({ navigation }: ProfileScreenProps) {
           <Text accessibilityRole="header" className="text-title font-semibold tracking-tight text-ink dark:text-paper">Seu espaço</Text>
           <View className="gap-3 rounded-2xl border p-5 bg-paper dark:bg-navy border-rule dark:border-dark-rule">
             <Text accessibilityRole="header" className="text-heading font-semibold text-ink dark:text-paper">{user?.name || "Visitante"}</Text>
+            <Text className="text-body-copy text-body dark:text-soft">{user?.email}</Text>
           </View>
           <View className="gap-4">
             <Text accessibilityRole="header" className="text-heading font-semibold text-ink dark:text-paper">Preferências</Text>

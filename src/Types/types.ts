@@ -87,9 +87,9 @@ export interface ThemeContextType {
 // Formulário de cadastro
 // =========================
 
-export type DemoRegisterFormErrors = Partial<Record<keyof DemoRegisterFormData, string>>;
+export type RegisterFormErrors = Partial<Record<keyof RegisterFormData, string>>;
 
-export interface DemoRegisterFormData {
+export interface RegisterFormData {
   name: string;
   email: string;
   senha: string;
@@ -197,21 +197,31 @@ export interface ProgressProps {
 export interface ServiceRowProps { service: PublicService; onPress: () => void }
 
 // =========================
-// Sessão demonstrativa — User
+// Perfil autenticado — User
 // =========================
 
-export type User = { name: string };
+export interface UserResponseDTO {
+  id: number;
+  name: string;
+  email: string;
+  role: "CITIZEN" | "MANAGER";
+  createdAt: string;
+}
+
+export type User = UserResponseDTO;
 
 // =========================
-// Sessão demonstrativa — Session
+// Sessão autenticada — Session
 // =========================
 
 export type Session = {
   user: User | null;
   loggedIn: boolean;
-  login: () => void;
-  register: (name: string) => void;
-  logout: () => void;
+  loading: boolean;
+  sessionError: string;
+  login: (data: LoginFormData) => Promise<void>;
+  register: (data: RegisterFormData) => Promise<void>;
+  logout: () => Promise<void>;
 };
 
 // =========================
@@ -318,17 +328,27 @@ export interface LoginFormData {
 
 export type LoginFormErrors = Record<keyof LoginFormData, string>;
 
-export interface RegisterFormData {
-  name: string;
-  cpf: string;
+export interface LoginRequestDTO {
   email: string;
-  senha: string;
-  confirmarSenha?: string;
-  phone: string;
-  cityId: number;
+  password: string;
 }
 
-export type RegisterFormErrors = Partial<Record<keyof RegisterFormData | "city", string>>;
+export interface RegisterRequestDTO {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export interface LoginResponseDTO {
+  token: string;
+}
+
+export interface ApiProblemDTO {
+  status?: number;
+  title?: string;
+  detail?: string;
+  errors?: { field: string; message: string }[];
+}
 
 export interface OwnerApiDTO {
     id: number;

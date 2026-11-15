@@ -1,4 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { ActivityIndicator, View } from "react-native";
 import { useAuth } from "../Context/AuthContext";
 import { PreparationsProvider } from "../Context/PreparationsContext";
 import { AboutScreen } from "../Screens/AboutScreen";
@@ -17,7 +18,13 @@ const RootStack = createNativeStackNavigator<RootStackParamList>();
 
 export default function AppNavigator() {
   
-  const { loggedIn } = useAuth();
+  const { loggedIn, loading } = useAuth();
+
+  if (loading) return (
+    <View className="flex-1 items-center justify-center bg-ground dark:bg-navy-2">
+      <ActivityIndicator accessibilityLabel="Validando sessão" />
+    </View>
+  );
   
   if (!loggedIn) return (
     <AuthStack.Navigator screenOptions={{ headerShown: false }}>
@@ -30,30 +37,11 @@ export default function AppNavigator() {
     <PreparationsProvider>
       <RootStack.Navigator screenOptions={{ headerShown: false, animation: "slide_from_right" }}>
         <RootStack.Screen name="HomeScreen" component={HomeScreen} />
-        <RootStack.Screen
-          name="ServicesScreen"
-          component={ServicesScreen}
-        />
-        <RootStack.Screen
-          name="ServiceDetailsScreen"
-          getId={({
-            params
-          }) => params.serviceId}
-          component={ServiceDetailsScreen}
-        />
-        <RootStack.Screen
-          name="PreparationsScreen"
-          component={PreparationsScreen}
-        />
-        <RootStack.Screen
-          name="PreparationDetailsScreen"
-          getId={({
-            params
-          }) => params.preparationId}
-          component={PreparationDetailsScreen}
-        />
-        <RootStack.Screen
-          name="ProfileScreen" component={ProfileScreen} />
+        <RootStack.Screen name="ServicesScreen" component={ServicesScreen} />
+        <RootStack.Screen name="ServiceDetailsScreen" getId={({ params }) => params.serviceId} component={ServiceDetailsScreen} />
+        <RootStack.Screen name="PreparationsScreen" component={PreparationsScreen} />
+        <RootStack.Screen name="PreparationDetailsScreen" getId={({ params }) => params.preparationId} component={PreparationDetailsScreen} />
+        <RootStack.Screen name="ProfileScreen" component={ProfileScreen} />
         <RootStack.Screen name="AboutScreen" component={AboutScreen} />
       </RootStack.Navigator>
     </PreparationsProvider>
