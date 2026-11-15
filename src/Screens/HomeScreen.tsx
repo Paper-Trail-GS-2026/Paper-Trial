@@ -1,15 +1,14 @@
-import { BottomNavigation } from "../Navigation/BottomNavigation";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
-import { useState } from "react";
 import { Search, Sparkles } from "lucide-react-native";
-import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
+import { KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Welcome } from "../Components/HomeScreenComponents/Welcome";
 import { PreparationSummary } from "../Components/PreparationSummary";
 import { ServiceRow } from "../Components/ServiceRow";
-import { useAuth } from "../Context/AuthContext";
-import { useTheme } from "../Context/ThemeContext";
 import { useServiceList } from "../Hooks/useServiceList";
-import type { WelcomeProps } from "../Types/types";
+import { useTheme } from "../Context/ThemeContext";
+import { BottomNavigation } from "../Navigation/BottomNavigation";
 import { HomeScreenProps } from "../Types/types";
 
 export function HomeScreen({ navigation }: HomeScreenProps) {
@@ -79,23 +78,4 @@ export function HomeScreen({ navigation }: HomeScreenProps) {
     </KeyboardAvoidingView>
     <BottomNavigation active="HomeScreen" />
   </SafeAreaView>;
-}
-
-function Welcome({ onProfile }: WelcomeProps) {
-  const { user } = useAuth();
-  const { isDark } = useTheme();
-  const name = user?.name.split(" ")[0] || "visitante";
-  return <View className="flex-row items-center gap-4">
-    <View className="flex-1 gap-1">
-      <Text accessibilityRole="header" className="text-title font-semibold tracking-tight text-ink dark:text-paper">Olá, {name}</Text>
-      <Text className="text-body-copy font-normal text-body dark:text-soft">Vamos deixar tudo preparado?</Text>
-    </View>
-    <Pressable
-      onPress={onProfile}
-      accessibilityRole="button"
-      accessibilityLabel="Abrir perfil"
-      className={`h-12 w-12 items-center justify-center rounded-full active:opacity-70 ${isDark ? "bg-dark-soft" : "bg-soft"}`}>
-      <Text className="text-label font-semibold text-brand dark:text-dark-brand">{name.slice(0, 2).toUpperCase()}</Text>
-    </Pressable>
-  </View>;
 }
