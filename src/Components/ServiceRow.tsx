@@ -1,5 +1,5 @@
-import { BusFront,CarFront,ChevronRight,House } from "lucide-react-native";
-import { Pressable,Text,View } from "react-native";
+import { BusFront, CarFront, ChevronRight, House } from "lucide-react-native";
+import { Pressable, Text, View } from "react-native";
 import { useTheme } from "../Context/ThemeContext";
 import type { ServiceRowProps } from "../Types/types";
 
