@@ -1,13 +1,12 @@
-import { Header } from "../Components/Header";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
-import { FileText } from "lucide-react-native";
-import { useState } from "react";
 import { KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Header } from "../Components/Header";
+import { Guidance } from "../Components/ServiceDetailScreenComponents/Guidance";
+import { Requirements } from "../Components/ServiceDetailScreenComponents/Requirements";
+import { demoServices } from "../Data/ServicesData";
 import { usePreparations } from "../Context/PreparationsContext";
 import { useTheme } from "../Context/ThemeContext";
-import { demoServices } from "../Data/ServicesData";
-import type { RequirementsProps } from "../Types/types";
 import { ServiceDetailsScreenProps } from "../Types/types";
 
 export function ServiceDetailsScreen({ route, navigation }: ServiceDetailsScreenProps) {
@@ -63,37 +62,4 @@ export function ServiceDetailsScreen({ route, navigation }: ServiceDetailsScreen
       </View>
     </KeyboardAvoidingView>
   </SafeAreaView>);
-}
-
-function Requirements({ items }: RequirementsProps) {
-  const { colors, isDark } = useTheme();
-  return (<View className="gap-1">
-    <Text accessibilityRole="header" className="text-heading font-semibold text-ink dark:text-paper mb-2">O que preparar</Text>
-    {items.map(item => <View key={item.name} className={`flex-row gap-3 py-4 border-b ${isDark ? "border-dark-rule" : "border-rule"}`}>
-      <FileText size={21} color={colors.brand} />
-      <View className="flex-1 gap-1">
-        <Text className="text-body-copy font-normal text-ink dark:text-paper">{item.name}</Text>
-        <Text className="text-caption font-normal text-body dark:text-soft">{item.description}</Text>
-        <Text className="text-label font-semibold text-brand dark:text-dark-brand">{item.required ? "Obrigatório" : "Opcional"}</Text>
-      </View>
-    </View>)}
-  </View>);
-}
-
-function Guidance() {
-  const [open, setOpen] = useState(false);
-  return (<View className="gap-3 rounded-2xl border p-5 bg-paper dark:bg-navy border-rule dark:border-dark-rule">
-    <Text accessibilityRole="header" className="text-heading font-semibold text-ink dark:text-paper">Ficou alguma dúvida?</Text>
-    <Text className="text-body-copy font-normal text-body dark:text-soft">Veja como organizar sua lista.</Text>
-    <TouchableOpacity
-      onPress={() => setOpen(!open)}
-      activeOpacity={0.8}
-      accessibilityRole="button"
-      className="min-h-14 flex-row items-center justify-center gap-2.5 rounded-xl px-5 py-3.5 bg-soft dark:bg-dark-soft">
-      <Text className="text-label font-semibold text-brand dark:text-dark-brand text-center">{open ? "Ocultar explicação" : "Ver explicação"}</Text>
-    </TouchableOpacity>
-    {open && <View accessibilityLiveRegion="polite" className="gap-3">
-      <Text className="text-body-copy font-normal text-ink dark:text-paper">Marque cada item quando estiver preparado. Você pode desmarcá-lo a qualquer momento.</Text>
-    </View>}
-  </View>);
 }
