@@ -105,9 +105,9 @@ export interface RegisterFormData {
 export type RootStackParamList = {
   HomeScreen: undefined;
   ServicesScreen: undefined;
-  ServiceDetailsScreen: { serviceId: string };
+  ServiceDetailsScreen: { serviceId: string; source: "api" | "demo" };
   PreparationsScreen: undefined;
-  PreparationDetailsScreen: { preparationId: string };
+  PreparationDetailsScreen: { preparationId: string; source: "api" | "demo" };
   ProfileScreen: undefined;
   AboutScreen: undefined;
 };
@@ -194,7 +194,7 @@ export interface ProgressProps {
 // Propriedades de ServiceRow
 // =========================
 
-export interface ServiceRowProps { service: PublicService; onPress: () => void }
+export interface ServiceRowProps { service: CatalogService; onPress: () => void }
 
 // =========================
 // Perfil autenticado — User
@@ -301,8 +301,9 @@ export interface RequirementsProps {
 // =========================
 
 export interface CategoryFilterProps {
-  selected: string;
-  onSelect: (value: string) => void;
+  categories: CategoryResponseDTO[];
+  selected: number | null;
+  onSelect: (value: number | null) => void;
 }
 
 // =========================
@@ -364,4 +365,100 @@ export interface FormattedTextInputProps extends Omit<TextInputProps, "value" | 
   format: "cpf" | "phone";
   value: string;
   onChangeText: (value: string) => void;
+}
+
+// =========================
+// Catálogo Java e paginação
+// =========================
+
+export interface CategoryResponseDTO {
+  id: number;
+  name: string;
+}
+
+export interface JavaPageDTO<T> {
+  content: T[];
+  page: {
+    number: number;
+    size: number;
+    totalElements: number;
+    totalPages: number;
+  };
+}
+
+export interface ServiceResponseDTO {
+  id: number;
+  categoryId: number;
+  title: string;
+  description: string;
+  cityName: string;
+  version: number;
+}
+
+export interface CatalogService {
+  id: string;
+  categoryId: number;
+  name: string;
+  category: string;
+  description: string;
+  cityName: string;
+  version: number;
+}
+
+export interface ApiServiceDetailsProps { serviceId: string }
+
+export interface RequirementInfoDTO {
+  id: number;
+  title: string;
+  required: boolean;
+  sourceUrl: string | null;
+}
+
+export interface ServiceSnapshotDTO {
+  serviceId: number;
+  version: number;
+  title: string;
+  requirements: RequirementInfoDTO[];
+}
+
+export interface ApiRequirementsProps { serviceId: string }
+
+export interface GuidanceRequestDTO { question: string }
+
+export interface GuidanceResponseDTO {
+  answer: string;
+  sources: { sourceUrl: string; sourceTitle: string; reviewedAt: string }[];
+  insufficientEvidence: boolean;
+}
+
+export interface ApiGuidanceProps { serviceId: string }
+
+export interface GuidanceMutationInput { text: string; signal: AbortSignal }
+
+export interface PreparationResponseDTO {
+  id: number;
+  serviceId: number;
+  sourceVersion: number;
+  title: string;
+  createdAt: string;
+}
+
+export interface DotnetPageDTO<T> {
+  items: T[];
+  page: number;
+  pageSize: number;
+  totalItems: number;
+  totalPages: number;
+  hasPrevious: boolean;
+  hasNext: boolean;
+}
+
+export interface CreatePreparationRequestDTO { serviceId: number; title: string }
+export interface PreparationCreationIntent { key: string; payload: CreatePreparationRequestDTO }
+export interface CreatePreparationProps { serviceId: number; title: string }
+
+export interface LoadindCircleProps {
+  label?: string;
+  size?: number;
+  tone?: "brand" | "onBrand" | "inverse";
 }
