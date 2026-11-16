@@ -1,6 +1,7 @@
+import { LoadindCircle } from "../LoadindCircle";
 import { Eye, EyeOff } from "lucide-react-native";
 import { useState } from "react";
-import { ActivityIndicator, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useRegisterForm } from "../../Hooks/useRegisterForm";
 import { useTheme } from "../../Context/ThemeContext";
 
@@ -111,8 +112,7 @@ export function RegisterForm() {
       disabled={isSubmitting}
       accessibilityState={{ disabled: isSubmitting, busy: isSubmitting }}
       className="min-h-14 flex-row items-center justify-center gap-2.5 rounded-xl px-5 py-3.5 bg-navy-2 dark:bg-dark-brand">
-      {isSubmitting && <ActivityIndicator color={colors.onBrand} />}
-      <Text className="text-label font-semibold text-paper dark:text-navy-2 text-center">Experimentar o PaperTrail</Text>
+      {isSubmitting ? <LoadindCircle label="Criando conta…" tone="onBrand" /> : <Text className="text-label font-semibold text-paper dark:text-navy-2 text-center">Experimentar o PaperTrail</Text>}
     </TouchableOpacity>
   </View>);
 }

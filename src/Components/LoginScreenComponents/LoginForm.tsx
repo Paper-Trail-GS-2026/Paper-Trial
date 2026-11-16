@@ -1,3 +1,4 @@
+import { LoadindCircle } from "../LoadindCircle";
 import { Eye, EyeOff } from "lucide-react-native";
 import { useState } from "react";
 import { Pressable, Text, TextInput, TouchableOpacity, View } from "react-native";
@@ -74,7 +75,7 @@ export function LoginForm() {
         activeOpacity={0.8}
         accessibilityRole="button"
         className="min-h-14 flex-row items-center justify-center gap-2.5 rounded-xl px-5 py-3.5 bg-navy-2 dark:bg-dark-brand">
-        <Text className="text-label font-semibold text-paper dark:text-navy-2 text-center">{isSubmitting ? "Entrando..." : "Entrar"}</Text>
+        {isSubmitting ? <LoadindCircle label="Entrando..." tone="onBrand" /> : <Text className="text-label font-semibold text-paper dark:text-navy-2 text-center">Entrar</Text>}
       </TouchableOpacity>
     </View>
   );
