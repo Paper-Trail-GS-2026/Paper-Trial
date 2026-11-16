@@ -9,14 +9,21 @@ export const api = axios.create({
   headers: { "Content-Type": "application/json" },
 });
 
+export const dotnetApi = axios.create({
+  baseURL: env.dotNETAPiUrl,
+  timeout: 15000,
+  headers: { "Content-Type": "application/json" },
+});
+
 let onUnauthorized: (() => Promise<void>) | null = null;
 
 export function setUnauthorizedHandler(handler: (() => Promise<void>) | null) {
   onUnauthorized = handler;
 }
 
-api.interceptors.request.use(async (config) => {
-  const isPublic = config.method === "post" &&
+for (const client of [api, dotnetApi]) {
+client.interceptors.request.use(async (config) => {
+  const isPublic = client === api && config.method === "post" &&
     (config.url === "/auth/login" || config.url === "/auth/register");
   if (!isPublic && !config.headers.Authorization) {
     const token = await getStoredToken();
@@ -25,7 +32,7 @@ api.interceptors.request.use(async (config) => {
   return config;
 });
 
-api.interceptors.response.use(
+client.interceptors.response.use(
   (response) => response,
   async (error: unknown) => {
     if (!axios.isAxiosError<ApiProblemDTO>(error) || axios.isCancel(error)) {
@@ -67,3 +74,5 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+}
