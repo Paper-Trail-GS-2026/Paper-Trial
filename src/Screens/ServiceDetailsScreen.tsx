@@ -1,3 +1,4 @@
+import { ApiServiceDetails } from "../Components/ServiceDetailScreenComponents/ApiServiceDetails";
 import { StatusBar } from "expo-status-bar";
 import { KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -13,6 +14,7 @@ export function ServiceDetailsScreen({ route, navigation }: ServiceDetailsScreen
   const { isDark } = useTheme();
   const service = demoServices.find(s => s.id === route.params.serviceId);
   const { create, preparations } = usePreparations();
+  if (route.params.source === "api") return <ApiServiceDetails serviceId={route.params.serviceId} />;
   if(!service)
     return (<SafeAreaView edges={["top", "left", "right", "bottom"]} className="flex-1 bg-ground dark:bg-navy-2">
       <StatusBar style={isDark ? "light" : "dark"} />
@@ -51,7 +53,7 @@ export function ServiceDetailsScreen({ route, navigation }: ServiceDetailsScreen
         <View className="w-full max-w-2xl self-center gap-2">
           <TouchableOpacity
             onPress={() => navigation.navigate("PreparationDetailsScreen", {
-              preparationId: create(service.id)
+              preparationId: create(service.id), source: "demo"
             })}
             activeOpacity={0.8}
             accessibilityRole="button"
