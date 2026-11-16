@@ -1,3 +1,4 @@
+import { ApiPreparationDetails } from "../Components/PrepDetailScreenComponents/ApiPreparationDetails";
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
 import { KeyboardAvoidingView, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
@@ -20,6 +21,8 @@ export function PreparationDetailsScreen({ route, navigation }: PreparationDetai
   const [deleting, setDeleting] = useState(false);
   const preparation = preparations.find(p => p.id === route.params.preparationId);
   const service = demoServices.find(s => s.id === preparation?.serviceId);
+
+  if (route.params.source === "api") return <ApiPreparationDetails route={route} navigation={navigation} />;
 
   if(!preparation || !service)
     return (<SafeAreaView edges={["top", "left", "right", "bottom"]} className="flex-1 bg-ground dark:bg-navy-2">
@@ -69,7 +72,7 @@ export function PreparationDetailsScreen({ route, navigation }: PreparationDetai
           <Text accessibilityLiveRegion="polite" className="text-caption font-normal text-body dark:text-soft">{preparation.updated}</Text>
           <TouchableOpacity
             onPress={() => navigation.navigate("ServiceDetailsScreen", {
-              serviceId: service.id
+              serviceId: service.id, source: "demo"
             })}
             activeOpacity={0.8}
             accessibilityRole="button"
