@@ -39,9 +39,9 @@ export default function AppNavigator() {
       <RootStack.Navigator screenOptions={{ headerShown: false, animation: "slide_from_right" }}>
         <RootStack.Screen name="HomeScreen" component={HomeScreen} />
         <RootStack.Screen name="ServicesScreen" component={ServicesScreen} />
-        <RootStack.Screen name="ServiceDetailsScreen" getId={({ params }) => `${params.source}:${params.serviceId}`} component={ServiceDetailsScreen} />
+        <RootStack.Screen name="ServiceDetailsScreen" component={ServiceDetailsScreen} />
         <RootStack.Screen name="PreparationsScreen" component={PreparationsScreen} />
-        <RootStack.Screen name="PreparationDetailsScreen" getId={({ params }) => `${params.source}:${params.preparationId}`} component={PreparationDetailsScreen} />
+        <RootStack.Screen name="PreparationDetailsScreen" component={PreparationDetailsScreen} />
         <RootStack.Screen name="ProfileScreen" component={ProfileScreen} />
         <RootStack.Screen name="AboutScreen" component={AboutScreen} />
       </RootStack.Navigator>
