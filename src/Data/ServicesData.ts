@@ -23,5 +23,3 @@ export const demoServices: PublicService[] = [
     ]
   },
 ];
-
-export const serviceCategories = ["Todos", ...new Set(demoServices.map((service) => service.category))];

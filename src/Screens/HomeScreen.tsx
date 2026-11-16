@@ -1,3 +1,4 @@
+import { LoadindCircle } from "../Components/LoadindCircle";
 import { StatusBar } from "expo-status-bar";
 import { Search, Sparkles } from "lucide-react-native";
 import { useState } from "react";
@@ -13,7 +14,7 @@ import { HomeScreenProps } from "../Types/types";
 
 export function HomeScreen({ navigation }: HomeScreenProps) {
   const [searchFocused, setSearchFocused] = useState(false);
-  const { search, setSearch, services } = useServiceList();
+  const { search, setSearch, services, servicesQuery } = useServiceList();
   const { colors, isDark } = useTheme();
   return <SafeAreaView edges={["top", "left", "right"]} className="flex-1 bg-ground dark:bg-navy-2">
     <StatusBar style={isDark ? "light" : "dark"} />
@@ -48,13 +49,21 @@ export function HomeScreen({ navigation }: HomeScreenProps) {
           </View>
           <View className="gap-3">
             <View className="flex-row items-center justify-between">
-              <Text accessibilityRole="header" className="text-heading font-semibold text-ink dark:text-paper">Serviços populares</Text>
+              <Text accessibilityRole="header" className="text-heading font-semibold text-ink dark:text-paper">Serviços disponíveis</Text>
             </View>
+            {servicesQuery.isPending && <LoadindCircle label="Carregando serviços…" />}
+            {servicesQuery.isError && <View className="gap-2">
+              <Text accessibilityRole="alert" className="text-body-copy text-body dark:text-soft">{servicesQuery.error.message}</Text>
+              <TouchableOpacity accessibilityRole="button" disabled={servicesQuery.isFetching}
+                onPress={() => { void servicesQuery.refetch(); }} className="min-h-12 justify-center">
+                {servicesQuery.isFetching ? <LoadindCircle label="Carregando…" /> : <Text className="text-label font-semibold text-brand dark:text-dark-brand">Tentar carregar serviços novamente</Text>}
+              </TouchableOpacity>
+            </View>}
             {services.map(service => <ServiceRow
               key={service.id}
               service={service}
-              onPress={() => navigation.navigate("ServiceDetailsScreen", { serviceId: service.id })} />)}
-            {!services.length && <Text className="text-body-copy font-normal text-body dark:text-soft">Nenhum serviço encontrado. Tente outro nome ou categoria.</Text>}
+              onPress={() => navigation.navigate("ServiceDetailsScreen", { serviceId: service.id, source: "api" })} />)}
+            {servicesQuery.isSuccess && !services.length && <Text className="text-body-copy font-normal text-body dark:text-soft">Nenhum serviço encontrado. Tente outro nome ou categoria.</Text>}
           </View>
           <View className={`flex-row gap-3 rounded-2xl p-5 ${isDark ? "bg-dark-soft" : "bg-soft"}`}>
             <Sparkles
