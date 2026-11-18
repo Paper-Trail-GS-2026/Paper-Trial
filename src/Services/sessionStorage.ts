@@ -1,7 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { UserResponseDTO } from "../Types/types";
 
-// Chaves próprias do PaperTrail; dados legados do Clyvo não autenticam este app.
 const TOKEN_KEY = "@papertrail_auth_token";
 const USER_KEY = "@papertrail_user_data";
 
