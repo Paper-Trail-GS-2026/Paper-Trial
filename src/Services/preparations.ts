@@ -54,3 +54,18 @@ export async function createPreparation(payload: CreatePreparationRequestDTO, ke
   }
   return data;
 }
+
+export async function renamePreparation(id: string, title: string): Promise<PreparationResponseDTO> {
+  if (!/^[1-9]\d*$/.test(id) || !Number.isSafeInteger(Number(id))) throw new Error("Preparativo inválido.");
+  const trimmed = title.trim();
+  if (!trimmed || trimmed.length > 160) throw new Error("Informe um nome de até 160 caracteres.");
+  const { data } = await dotnetApi.put<PreparationResponseDTO>(`/preparativos/${id}`, { title: trimmed });
+  if (!isPreparationResponse(data) || data.id !== Number(id)) throw new Error("Não foi possível confirmar a alteração. Atualize o preparativo.");
+  return data;
+}
+
+export async function deletePreparation(id: string): Promise<void> {
+  if (!/^[1-9]\d*$/.test(id) || !Number.isSafeInteger(Number(id))) throw new Error("Preparativo inválido.");
+  const { status } = await dotnetApi.delete(`/preparativos/${id}`);
+  if (status !== 204) throw new Error("Não foi possível confirmar a exclusão. Atualize seus preparativos.");
+}

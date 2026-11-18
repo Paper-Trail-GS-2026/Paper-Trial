@@ -11,6 +11,8 @@ export const queryKeys = {
   },
   preparations: {
     all: ['preparations'] as const,
+    checklist: (id: string, userId?: number) => ['preparations', 'checklist', userId, id] as const,
+    progress: (id: string, userId?: number) => ['preparations', 'progress', userId, id] as const,
     list: (userId?: number) => ['preparations', 'list', userId] as const,
     detail: (id: string, userId?: number) => ['preparations', 'detail', userId, id] as const,
   },
