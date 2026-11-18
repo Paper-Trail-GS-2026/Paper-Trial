@@ -22,7 +22,7 @@ export function PreparationDetailsScreen({ route, navigation }: PreparationDetai
   const preparation = preparations.find(p => p.id === route.params.preparationId);
   const service = demoServices.find(s => s.id === preparation?.serviceId);
 
-  if (route.params.source === "api") return <ApiPreparationDetails route={route} navigation={navigation} />;
+  if (route.params.source === "api") return <ApiPreparationDetails key={route.params.preparationId} route={route} navigation={navigation} />;
 
   if(!preparation || !service)
     return (<SafeAreaView edges={["top", "left", "right", "bottom"]} className="flex-1 bg-ground dark:bg-navy-2">
@@ -85,7 +85,7 @@ export function PreparationDetailsScreen({ route, navigation }: PreparationDetai
               <Text className="text-label font-semibold text-brand dark:text-dark-brand text-center">Editar nome do preparativo</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setDeleting(true)} activeOpacity={0.8} accessibilityRole="button"
-              className="min-h-14 items-center justify-center rounded-xl px-5 py-3.5">
+              className="min-h-14 items-center justify-center rounded-xl px-5 py-3.5 bg-danger-surface dark:bg-dark-danger-surface">
               <Text className="text-label font-semibold text-danger dark:text-dark-danger text-center">Excluir preparativo</Text>
             </TouchableOpacity>
           </View>

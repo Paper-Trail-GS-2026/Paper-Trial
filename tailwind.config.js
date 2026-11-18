@@ -75,6 +75,7 @@ const tailwindColors = {
   mint: paperTrailStatusColors.mint,
   warn: paperTrailStatusColors.warn,
   danger: paperTrailStatusColors.danger,
+  "danger-surface": "#F3E3E1",
   "status-ready": "#236644",
   "status-ready-bg": "#E7F3EC",
   "status-pending": "#855214",
@@ -139,6 +140,7 @@ module.exports = {
           soft: paperTrailDarkColors.soft,
           rule: paperTrailDarkColors.border,
           danger: paperTrailDarkColors.danger,
+          "danger-surface": "#4A3035",
         },
       },
       fontSize: {

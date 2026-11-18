@@ -38,7 +38,7 @@ export function ProfileScreen({ navigation }: ProfileScreenProps) {
             onPress={() => void logout()}
             activeOpacity={0.8}
             accessibilityRole="button"
-            className="min-h-14 flex-row items-center justify-center gap-2.5 rounded-xl px-5 py-3.5 bg-transparent">
+            className="min-h-14 flex-row items-center justify-center gap-2.5 rounded-xl px-5 py-3.5 bg-danger-surface dark:bg-dark-danger-surface">
             <Text className="text-label font-semibold text-danger dark:text-dark-danger text-center">Sair</Text>
           </TouchableOpacity>
         </View>

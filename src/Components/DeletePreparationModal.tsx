@@ -2,23 +2,27 @@ import { KeyboardAvoidingView, Modal, Platform, ScrollView, Text, TouchableOpaci
 import { SafeAreaView } from "react-native-safe-area-context";
 import type { DeletePreparationModalProps } from "../Types/types";
 
-export function DeletePreparationModal({ onConfirm, onCancel }: DeletePreparationModalProps) {
+export function DeletePreparationModal({ onConfirm, onCancel, busy = false, error }: DeletePreparationModalProps) {
   return (
-    <Modal transparent animationType="none" visible onRequestClose={onCancel}>
+    <Modal transparent animationType="none" visible onRequestClose={() => { if (!busy) onCancel(); }}>
       <SafeAreaView className="flex-1 bg-black/50">
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} className="flex-1">
           <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ flexGrow: 1, justifyContent: "center", padding: 24 }}>
-            <View accessibilityViewIsModal onAccessibilityEscape={onCancel} className="w-full max-w-lg self-center gap-3 rounded-2xl border p-5 bg-paper dark:bg-navy border-rule dark:border-dark-rule">
+            <View accessibilityViewIsModal onAccessibilityEscape={() => { if (!busy) onCancel(); }} className="w-full max-w-lg self-center gap-3 rounded-2xl border p-5 bg-paper dark:bg-navy border-rule dark:border-dark-rule">
               <Text accessibilityRole="header" className="text-heading font-semibold text-ink dark:text-paper">Excluir este preparativo?</Text>
               <Text className="text-body-copy font-normal text-body dark:text-soft">As marcações desta lista serão removidas.</Text>
+              {error && <Text accessibilityRole="alert" className="text-body-copy text-danger dark:text-dark-danger">{error}</Text>}
               <TouchableOpacity
+                disabled={busy}
+                accessibilityState={{ disabled: busy, busy }}
                 onPress={onConfirm}
                 activeOpacity={0.8}
                 accessibilityRole="button"
-                className="min-h-14 flex-row items-center justify-center gap-2.5 rounded-xl px-5 py-3.5 bg-transparent">
-                <Text className="text-label font-semibold text-danger dark:text-dark-danger text-center">Confirmar exclusão</Text>
+                className="min-h-14 flex-row items-center justify-center gap-2.5 rounded-xl px-5 py-3.5 bg-danger-surface dark:bg-dark-danger-surface">
+                <Text className="text-label font-semibold text-danger dark:text-dark-danger text-center">{busy ? "Excluindo…" : "Confirmar exclusão"}</Text>
               </TouchableOpacity>
               <TouchableOpacity
+                disabled={busy}
                 onPress={onCancel}
                 activeOpacity={0.8}
                 accessibilityRole="button"

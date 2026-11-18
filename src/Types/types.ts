@@ -263,12 +263,16 @@ export interface ChecklistProps {
 // =========================
 
 export interface EditPreparationNameModalProps {
+  busy?: boolean;
+  error?: string;
   title: string;
   onConfirm: (title: string) => void;
   onCancel: () => void;
 }
 
 export interface DeletePreparationModalProps {
+  busy?: boolean;
+  error?: string;
   onConfirm: () => void;
   onCancel: () => void;
 }
