@@ -435,9 +435,26 @@ export interface GuidanceResponseDTO {
   insufficientEvidence: boolean;
 }
 
+export interface ChatRequestDTO {
+  mensagem: string;
+  service_id?: number;
+  previous_interaction_id?: string;
+}
+
+export interface ChatResponseDTO {
+  resposta: string;
+  interaction_id: string;
+  fontes: { sourceUrl: string; sourceTitle: string; reviewedAt: string }[];
+  insufficientEvidence: boolean;
+}
+
 export interface ApiGuidanceProps { serviceId: string }
 
-export interface GuidanceMutationInput { text: string; signal: AbortSignal }
+export interface GuidanceMutationInput {
+  text: string;
+  signal: AbortSignal;
+  previousInteractionId?: string;
+}
 
 export interface PreparationResponseDTO {
   id: number;
