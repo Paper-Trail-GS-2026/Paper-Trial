@@ -8,13 +8,18 @@ export function useGuidance(serviceId: string) {
   const { loggedIn } = useAuth();
   const [question, setQuestion] = useState("");
   const [validationError, setValidationError] = useState("");
+  const [previousInteractionId, setPreviousInteractionId] = useState<string>();
   const request = useRef<AbortController | null>(null);
   const mutation = useMutation({
-    mutationFn: ({ text, signal }: GuidanceMutationInput) => askGuidance(serviceId, text, signal),
+    mutationFn: ({ text, signal, previousInteractionId }: GuidanceMutationInput) =>
+      askGuidance(serviceId, text, signal, previousInteractionId),
     retry: false,
   });
 
-  useEffect(() => () => { request.current?.abort(); }, [serviceId]);
+  useEffect(() => {
+    setPreviousInteractionId(undefined);
+    return () => { request.current?.abort(); };
+  }, [serviceId]);
 
   const updateQuestion = (value: string) => {
     if (request.current) return;
@@ -34,7 +39,14 @@ export function useGuidance(serviceId: string) {
     const controller = new AbortController();
     request.current = controller;
     try {
-      await mutation.mutateAsync({ text: question.trim(), signal: controller.signal });
+      const response = await mutation.mutateAsync({
+        text: question.trim(),
+        signal: controller.signal,
+        previousInteractionId,
+      });
+      if (response.interactionId) {
+        setPreviousInteractionId(response.interactionId);
+      }
     } catch { /* O erro é exibido pelo estado da mutation. */ }
     finally { request.current = null; }
   };

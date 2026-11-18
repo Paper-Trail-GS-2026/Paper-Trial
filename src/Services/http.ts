@@ -15,13 +15,19 @@ export const dotnetApi = axios.create({
   headers: { "Content-Type": "application/json" },
 });
 
+export const chatbotApi = axios.create({
+  baseURL: env.chatbot_Api_Url,
+  timeout: 25000,
+  headers: { "Content-Type": "application/json" },
+});
+
 let onUnauthorized: (() => Promise<void>) | null = null;
 
 export function setUnauthorizedHandler(handler: (() => Promise<void>) | null) {
   onUnauthorized = handler;
 }
 
-for (const client of [api, dotnetApi]) {
+for (const client of [api, dotnetApi, chatbotApi]) {
 client.interceptors.request.use(async (config) => {
   const isPublic = client === api && config.method === "post" &&
     (config.url === "/auth/login" || config.url === "/auth/register");
