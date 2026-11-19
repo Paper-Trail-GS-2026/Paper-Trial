@@ -32,6 +32,16 @@
           "imageWidth": 76
         }
       ]
-    ]
+    ],
+    "extra": {
+      "appInfo": {
+        "commitHash": "e195b136dd1e02dcdde14538f69a012027981811",
+        "hasLocalChanges": true
+      },
+      "eas": {
+        "projectId": "bf0446de-d0fa-478c-8047-6877bf663b0f"
+      }
+    },
+    "owner": "ruralgiovane"
   }
 }

@@ -26,6 +26,10 @@ module.exports = ({ config }) => {
 
   return {
     ...config,
+    android: {
+      ...config.android,
+      package: config.android?.package || 'com.ruralgiovane.papertrial',
+    },
     extra: {
       ...config.extra,
       appInfo: { commitHash, hasLocalChanges },
