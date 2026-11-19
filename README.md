@@ -119,15 +119,12 @@ EXPO_PUBLIC_DOTNET_API_URL=https://papertrail-dotnet-rm561584.azurewebsites.net
 ### 3. Iniciar o Aplicativo
 ```bash
 npx expo start -c
+ou
+npx expo start -c --tunnel
 ```
 - Abra o aplicativo **Expo Go** em seu dispositivo físico (Android ou iOS) e leia o QR Code exibido no terminal.
 - Ou pressione `a` para abrir no Emulador Android, `i` para simulador iOS ou `w` para testar no navegador.
 
-Na web, as APIs publicadas permitem as origens `http://localhost:8081` e `http://127.0.0.1:8081`. Para usar a porta configurada no CORS:
-
-```bash
-npx expo start --web --localhost --port 8081
-```
 
 > [!TIP]
 > **Documentação Interativa das APIs:**
@@ -229,6 +226,8 @@ EXPO_PUBLIC_DOTNET_API_URL=http://10.0.2.2:5180
 3. Inicie o Expo:
    ```bash
    npx expo start -c
+   ou
+   npx expo start -c --tunnel
    ```
 
 ---
@@ -271,6 +270,8 @@ flowchart LR
 6. **Iniciar o Expo:**
    ```bash
    npx expo start -c
+   ou
+   npx expo start -c --tunnel
    ```
 
 ---
