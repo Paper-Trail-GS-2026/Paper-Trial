@@ -59,9 +59,9 @@ O cidadão consulta serviços, analisa os requisitos detalhados com as respectiv
 - **Suporte Multiplataforma:** Android, iOS e Web ([React Native Web](https://necolas.github.io/react-native-web/))
 
 ### Ecossistema Backend & Infraestrutura
-- **Backends:** Java 17 (Spring Boot 3.x) e .NET 9 (ASP.NET Core Minimal APIs / Clean Architecture)
+- **Backends:** Java 17 (Spring Boot 4.1.2) e .NET 10 (ASP.NET Core Minimal APIs / Clean Architecture)
 - **Inteligência Artificial:** Spring AI integrado com recuperação contextual (RAG) baseada em trechos de fontes oficiais
-- **Bancos de Dados:** Oracle Database (persistência relacional) e MongoDB (projeção documental para auditoria e consultas analíticas)
+- **Bancos de Dados:** Azure SQL nas APIs publicadas, com identidade gerenciada. Oracle fica como alternativa local; os scripts MongoDB fazem parte da disciplina de Database.
 - **Mensageria:** RabbitMQ para notificação assíncrona de eventos (ex: sinalização de atualização de versões de serviços)
 - **Cloud Hosting:** Microsoft Azure App Services
 - **Túneis de Desenvolvimento:** Cloudflare Tunnel (`cloudflared`)
@@ -86,7 +86,7 @@ Para facilitar a homologação e avaliação imediata da banca examinadora, util
 | **Senha:** | `senha123` |
 
 > [!NOTE]
-> **Fluxo de Novo Cadastro:** Caso prefira cadastrar um novo cidadão, toque em **"Cadastre-se"** na tela de Login. A requisição será processada pela API Java (`POST /auth/register`), que registra a credencial com hash seguro BCrypt, emite o JWT e realiza o login automático, salvando o token de forma segura no `AsyncStorage`.
+> **Fluxo de Novo Cadastro:** Toque em **"Criar uma conta"** na tela de Login. O app chama `POST /auth/register` e depois `POST /auth/login`. A API guarda a senha com hash BCrypt, e o token retornado no login é salvo pelo app no `AsyncStorage`.
 
 ---
 
@@ -123,6 +123,12 @@ npx expo start -c
 - Abra o aplicativo **Expo Go** em seu dispositivo físico (Android ou iOS) e leia o QR Code exibido no terminal.
 - Ou pressione `a` para abrir no Emulador Android, `i` para simulador iOS ou `w` para testar no navegador.
 
+Na web, as APIs publicadas permitem as origens `http://localhost:8081` e `http://127.0.0.1:8081`. Para usar a porta configurada no CORS:
+
+```bash
+npx expo start --web --localhost --port 8081
+```
+
 > [!TIP]
 > **Documentação Interativa das APIs:**
 > - [Swagger da API Java (Azure)](https://papertrail-java-rm561584.azurewebsites.net/swagger-ui/index.html)
@@ -134,21 +140,21 @@ npx expo start -c
 
 ### 1. API Java Spring Boot (Identidade, Catálogo, Requisitos e Orientação IA)
 - **Repositório:** [Paper-Trail-GS-2026/Java-Advanced-Paper-Trial](https://github.com/Paper-Trail-GS-2026/Java-Advanced-Paper-Trial)
-- **Tecnologias:** Java 17, Spring Boot 3.x, Spring Data JPA / Hibernate, Spring Security, Spring AI, Flyway e Oracle Database.
+- **Tecnologias:** Java 17, Spring Boot 4.1.2, Spring Data JPA / Hibernate, Spring Security, Spring AI e Azure SQL. O schema é instalado por script SQL; o Flyway está desativado.
 - **Responsabilidades:** Autenticação e perfil do cidadão (`POST /auth/register`, `POST /auth/login`, `GET /auth/me`), catálogo de categorias e serviços públicos com paginação e ordenação, geração do snapshot imutável de requisitos (`/services/{id}/requirements-snapshot`) e processamento de perguntas com IA fundamentada em evidências.
-- **Segurança:** Autenticação stateless baseada em tokens JWT e criptografia de credenciais com BCrypt.
+- **Segurança:** Autenticação stateless com JWT RS256 e senhas armazenadas com hash BCrypt.
 
 ### 2. API .NET ASP.NET Core (Preparativos, Checklist e Progresso)
 - **Repositório:** [Paper-Trail-GS-2026/.Net-Paper-Trial](https://github.com/Paper-Trail-GS-2026/.Net-Paper-Trial)
-- **Tecnologias:** .NET 9 (C#), ASP.NET Core Minimal APIs, Clean Architecture, Entity Framework Core, Oracle Database e MongoDB.
+- **Tecnologias:** .NET 10 (C#), ASP.NET Core Minimal APIs, Clean Architecture, Entity Framework Core e Azure SQL.
 - **Responsabilidades:** Gerenciamento dos preparativos pessoais do cidadão (`/preparativos/`), preservação da versão histórica dos requisitos no ato de criação, persistência de itens do checklist, alternância de estado (pendente/concluído) e cálculo analítico de progresso (`/progresso`).
 - **Resiliência:** Suporte a cabeçalho `Idempotency-Key` na criação de preparativos, evitando duplicidades em cenários de instabilidade de rede.
 
 ### 3. Inteligência Artificial e Arquiteturas Disruptivas (Spring AI / RAG Contextual)
 - **Repositório:** [Paper-Trail-GS-2026/Disruptive-Architectures-Paper-Trial](https://github.com/Paper-Trail-GS-2026/Disruptive-Architectures-Paper-Trial)
 - **Tecnologias:** Modelos de Linguagem Generativos, Spring AI e RAG (*Retrieval-Augmented Generation*).
-- **Responsabilidades:** Recuperação semântica de trechos normativos previamente cadastrados e revisados para responder dúvidas dos cidadãos sobre um serviço específico.
-- **Governança:** Caso a documentação disponível não contenha subsídios suficientes, a IA sinaliza expressamente a insuficiência de evidências (`insufficientEvidence: true`) com indicação das fontes consultadas, sem alucinações de requisitos inexistentes.
+- **Responsabilidades:** Na API Java, o RAG usa busca lexical BM25 sobre os trechos cadastrados para o serviço e sua versão atual. O modelo recebe os trechos recuperados e produz a resposta com citações.
+- **Governança:** Sem trechos relevantes, o Java retorna `insufficientEvidence: true` antes de chamar o modelo. As respostas fundamentadas acompanham as fontes cadastradas.
 
 ---
 
@@ -156,7 +162,7 @@ npx expo start -c
 
 O **PaperTrail** entrega uma experiência fluida para guiar o cidadão da descoberta do serviço à conclusão de sua preparação:
 
-1. **Autenticação Segura & Sessão:** Login stateless com armazenamento de token JWT em `AsyncStorage`, restauração automática de sessão ao reabrir o app, renovação transparente e interceptores Axios com deslogue automático em caso de expiração (HTTP 401).
+1. **Autenticação e sessão:** O JWT fica no `AsyncStorage`. Ao reabrir o app, a sessão é validada por `GET /auth/me`. Se a API retornar 401, o app encerra a sessão e pede um novo login.
 2. **Catálogo de Serviços Públicos:** Listagem com suporte a paginação assíncrona, filtragem por categorias governamentais (ex: Documentos Pessoais, Saúde, Trabalho) e barra de pesquisa dinâmica.
 3. **Detalhamento do Serviço & Requisitos:** Exibição da versão do serviço, requisitos obrigatórios/opcionais, prazos e fontes oficiais com links diretos e datas de revisão.
 4. **Orientação Contextual com IA (Perguntas & Respostas):** O cidadão digita sua dúvida sobre o serviço selecionado e recebe respostas fundamentadas com indicação transparente das fontes oficiais consultadas.
